@@ -70,7 +70,7 @@ class RecipeScrapper:
 
     def __init__(self, parsers, q):
         self.parsers = parsers
-        parser_url = namedtuple('parser_url', ['parser', 'url'])
+        parser_url = namedtuple('ParserUrl', 'parser url')
         self.urls = [parser_url(p, p.url + q) for p in parsers]
         self.session = aiohttp.ClientSession()
 
@@ -78,7 +78,7 @@ class RecipeScrapper:
         "aync http request: returns a tuple with"
         async with self.session.get(parser_url.url) as response:
             html = await response.read()
-            parser_html = namedtuple('parser_html', ['parser', 'html'])
+            parser_html = namedtuple('ParserHtml', 'parser html')
             return parser_html(parser_url.parser, html)
 
     async def run_coroutines(self):

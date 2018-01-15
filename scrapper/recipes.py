@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from collections import namedtuple
 import asyncio
 import aiohttp
 
@@ -69,14 +70,16 @@ class RecipeScrapper:
 
     def __init__(self, parsers, q):
         self.parsers = parsers
-        self.urls = [(p, p.url + q) for p in parsers]
+        parser_url = namedtuple('parser_url', ['parser', 'url'])
+        self.urls = [parser_url(p, p.url + q) for p in parsers]
         self.session = aiohttp.ClientSession()
 
-    async def get_html(self, url):
+    async def get_html(self, parser_url):
         "aync http request: returns a tuple with"
-        async with self.session.get(url[1]) as response:
+        async with self.session.get(parser_url.url) as response:
             html = await response.read()
-            return url[0], html
+            parser_html = namedtuple('parser_html', ['parser', 'html'])
+            return parser_html(parser_url.parser, html)
 
     async def run_coroutines(self):
         tasks = []
@@ -99,5 +102,5 @@ class RecipeScrapper:
         return future.result()
 
     def scrape(self):
-        parsers_urls = self.fetch_recipes()
-        return [i[0](i[1]).parse() for i in parsers_urls]
+        parsers_html = self.fetch_recipes()
+        return [i.parser(i.html).parse() for i in parsers_html]

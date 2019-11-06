@@ -16,5 +16,5 @@ multidict==3.3.2
 Pygments==2.2.0
 requests==2.18.4
 urllib3==1.22
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 yarl==0.17.0

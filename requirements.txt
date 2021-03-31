@@ -10,7 +10,7 @@ httpie==1.0.3
 idna==2.6
 itsdangerous==0.24
 Jinja2==2.10
-lxml==4.1.1
+lxml==4.6.3
 MarkupSafe==1.0
 multidict==3.3.2
 Pygments==2.2.0
